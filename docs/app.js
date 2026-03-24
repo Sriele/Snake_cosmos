@@ -612,11 +612,21 @@ function drawSnake() {
   const length = Math.max(1, Math.hypot(dx, dy));
   const ux = dx / length;
   const uy = dy / length;
+  const px = -uy;
+  const py = ux;
   const angle = Math.atan2(uy, ux);
   const headColor = [94 + 96 * glowStrength, 120 + 104 * glowStrength, 92 + 120 * glowStrength];
   if (glowStrength > 0) drawGlow(head.x, head.y, 22, rgba(glowColor, 0.45));
+  ctx.fillStyle = rgba(headColor, 1);
+  ctx.beginPath();
+  ctx.moveTo(head.x - ux * 2 + px * 6, head.y - uy * 2 + py * 6);
+  ctx.lineTo(head.x + ux * 7 + px * 5, head.y + uy * 7 + py * 5);
+  ctx.lineTo(head.x + ux * 7 - px * 5, head.y + uy * 7 - py * 5);
+  ctx.lineTo(head.x - ux * 2 - px * 6, head.y - uy * 2 - py * 6);
+  ctx.closePath();
+  ctx.fill();
   ctx.save();
-  ctx.translate(head.x + ux * 3, head.y + uy * 3);
+  ctx.translate(head.x + ux * 1.5, head.y + uy * 1.5);
   ctx.rotate(angle);
   ctx.fillStyle = rgba(headColor, 1);
   ctx.strokeStyle = "rgb(60,82,64)";
@@ -750,8 +760,8 @@ function drawItemsCodex() {
     const rowY = y + 98 + index * 66;
     roundRect(x + 24, rowY, 592, 54, 18, "#12182c", rgba(item.glow_color, 1));
     drawIcon(item.icon_id, x + 52, rowY + 27, item.color, 11);
-    drawText(item.label, x + 78, rowY + 18, 24, "#fff", "left", 700);
-    drawText(item.description, x + 78, rowY + 40, 16, "#c4d4ec", "left", 500);
+    drawText(item.label, x + 78, rowY + 22, 22, "#fff", "left", 700);
+    drawText(item.description, x + 78, rowY + 42, 15, "#c4d4ec", "left", 500);
     drawText(`${item.duration.toFixed(0)}s | +${Math.floor(item.instant_sprint)} sprint`, x + 604, rowY + 28, 16, "#a4b6d2", "right", 500);
   });
 }
