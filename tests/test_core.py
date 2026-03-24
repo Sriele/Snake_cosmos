@@ -58,6 +58,15 @@ class SnakeCoreTests(unittest.TestCase):
         self.assertFalse(game.sprint_locked)
         self.assertTrue(game.sprint_active)
 
+    def test_direction_queue_preserves_legal_turn_sequence(self) -> None:
+        game = make_game()
+        game.enqueue_direction((0, -1))
+        game.enqueue_direction((-1, 0))
+        game.update(0.15, sprint_pressed=False)
+        self.assertEqual(game.direction, (0, -1))
+        game.update(0.15, sprint_pressed=False)
+        self.assertEqual(game.direction, (-1, 0))
+
 
 if __name__ == "__main__":
     unittest.main()

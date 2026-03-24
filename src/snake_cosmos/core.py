@@ -106,6 +106,7 @@ class SnakeGame:
         self.previous_snake: list[GridPos] = self.snake.copy()
         self.direction: GridPos = (1, 0)
         self.queued_direction: GridPos = self.direction
+        self.direction_queue: list[GridPos] = []
         self.pending_growth = 0
         self.score = 0
         self.best_score = 0
@@ -130,9 +131,12 @@ class SnakeGame:
         self.previous_snake = self.snake.copy()
 
     def enqueue_direction(self, direction: GridPos) -> None:
-        opposite = (-self.direction[0], -self.direction[1])
-        if direction != opposite:
-            self.queued_direction = direction
+        reference = self.direction_queue[-1] if self.direction_queue else self.queued_direction
+        opposite = (-reference[0], -reference[1])
+        if direction == reference or direction == opposite:
+            return
+        if len(self.direction_queue) < 2:
+            self.direction_queue.append(direction)
 
     def update(self, dt: float, sprint_pressed: bool) -> GameEvents:
         events = GameEvents()
@@ -209,6 +213,11 @@ class SnakeGame:
 
     def _step(self, events: GameEvents) -> None:
         self.snapshot_previous_snake()
+        if self.direction_queue:
+            next_direction = self.direction_queue.pop(0)
+            opposite = (-self.direction[0], -self.direction[1])
+            if next_direction != opposite:
+                self.queued_direction = next_direction
         self.direction = self.queued_direction
         head_x, head_y = self.snake[0]
         dx, dy = self.direction

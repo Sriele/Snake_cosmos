@@ -622,11 +622,28 @@ class SnakeCosmosApp:
         previous = self.game.previous_snake
         current = self.game.snake
         count = max(len(previous), len(current))
+        wrap_enabled = bool(self.game._effect_value("border_wrap"))
         segments: list[tuple[float, float]] = []
         for index in range(count):
             prev = previous[index] if index < len(previous) else previous[-1]
             curr = current[index] if index < len(current) else current[-1]
-            segments.append((lerp(prev[0], curr[0], progress), lerp(prev[1], curr[1], progress)))
+            prev_x = float(prev[0])
+            prev_y = float(prev[1])
+            curr_x = float(curr[0])
+            curr_y = float(curr[1])
+            if wrap_enabled:
+                dx = curr_x - prev_x
+                dy = curr_y - prev_y
+                if abs(dx) > self.game.width / 2:
+                    prev_x += self.game.width if dx < 0 else -self.game.width
+                if abs(dy) > self.game.height / 2:
+                    prev_y += self.game.height if dy < 0 else -self.game.height
+            x = lerp(prev_x, curr_x, progress)
+            y = lerp(prev_y, curr_y, progress)
+            if wrap_enabled:
+                x %= self.game.width
+                y %= self.game.height
+            segments.append((x, y))
         return segments
 
     def _snake_points(self) -> list[tuple[float, float]]:

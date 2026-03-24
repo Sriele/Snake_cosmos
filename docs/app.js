@@ -162,6 +162,7 @@ class SnakeGame {
     this.previousSnake = this.snake.map((s) => ({ ...s }));
     this.direction = { x: 1, y: 0 };
     this.queuedDirection = { ...this.direction };
+    this.directionQueue = [];
     this.pendingGrowth = 0;
     this.score = 0;
     this.alive = true;
@@ -182,9 +183,11 @@ class SnakeGame {
   }
 
   enqueueDirection(next) {
-    const opposite = { x: -this.direction.x, y: -this.direction.y };
-    if (next.x !== opposite.x || next.y !== opposite.y) {
-      this.queuedDirection = next;
+    const reference = this.directionQueue.length ? this.directionQueue[this.directionQueue.length - 1] : this.queuedDirection;
+    const opposite = { x: -reference.x, y: -reference.y };
+    if ((next.x === reference.x && next.y === reference.y) || (next.x === opposite.x && next.y === opposite.y)) return;
+    if (this.directionQueue.length < 2) {
+      this.directionQueue.push({ ...next });
       this.awaitFirstMove = false;
     }
   }
@@ -248,6 +251,13 @@ class SnakeGame {
 
   step(events) {
     this.previousSnake = this.snake.map((s) => ({ ...s }));
+    if (this.directionQueue.length) {
+      const nextDirection = this.directionQueue.shift();
+      const opposite = { x: -this.direction.x, y: -this.direction.y };
+      if (nextDirection.x !== opposite.x || nextDirection.y !== opposite.y) {
+        this.queuedDirection = { ...nextDirection };
+      }
+    }
     this.direction = { ...this.queuedDirection };
     const head = this.snake[0];
     let next = { x: head.x + this.direction.x, y: head.y + this.direction.y };
@@ -577,11 +587,28 @@ function interpolatedSnakePoints() {
   const progress = easeSnake(state.game.lastProgress);
   const current = state.game.snake;
   const previous = state.game.previousSnake;
+  const wrapEnabled = state.game.effectValue("border_wrap") > 0;
   return current.map((segment, index) => {
     const prev = previous[index] || previous[previous.length - 1];
+    let prevX = prev.x;
+    let prevY = prev.y;
+    const currX = segment.x;
+    const currY = segment.y;
+    if (wrapEnabled) {
+      const dx = currX - prevX;
+      const dy = currY - prevY;
+      if (Math.abs(dx) > state.game.width / 2) prevX += dx < 0 ? state.game.width : -state.game.width;
+      if (Math.abs(dy) > state.game.height / 2) prevY += dy < 0 ? state.game.height : -state.game.height;
+    }
+    let x = lerp(prevX, currX, progress);
+    let y = lerp(prevY, currY, progress);
+    if (wrapEnabled) {
+      x = mod(x, state.game.width);
+      y = mod(y, state.game.height);
+    }
     return pointForCell({
-      x: lerp(prev.x, segment.x, progress),
-      y: lerp(prev.y, segment.y, progress),
+      x,
+      y,
     });
   });
 }
@@ -617,28 +644,26 @@ function drawSnake() {
   const angle = Math.atan2(uy, ux);
   const headColor = [94 + 96 * glowStrength, 120 + 104 * glowStrength, 92 + 120 * glowStrength];
   if (glowStrength > 0) drawGlow(head.x, head.y, 22, rgba(glowColor, 0.45));
+  const bridgeCenterX = head.x - ux * 6;
+  const bridgeCenterY = head.y - uy * 6;
   ctx.fillStyle = rgba(headColor, 1);
   ctx.beginPath();
-  ctx.moveTo(head.x - ux * 7 + px * 6, head.y - uy * 7 + py * 6);
-  ctx.lineTo(head.x + ux * 4 + px * 5, head.y + uy * 4 + py * 5);
-  ctx.lineTo(head.x + ux * 4 - px * 5, head.y + uy * 4 - py * 5);
-  ctx.lineTo(head.x - ux * 7 - px * 6, head.y - uy * 7 - py * 6);
-  ctx.closePath();
+  ctx.ellipse(bridgeCenterX, bridgeCenterY, 7, 5, angle, 0, Math.PI * 2);
   ctx.fill();
   ctx.save();
-  ctx.translate(head.x - ux * 2, head.y - uy * 2);
+  ctx.translate(head.x - ux * 1.5, head.y - uy * 1.5);
   ctx.rotate(angle);
   ctx.fillStyle = rgba(headColor, 1);
   ctx.strokeStyle = "rgb(60,82,64)";
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.ellipse(16, 12, 12, 7, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, 12, 7, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
   ctx.fillStyle = "rgba(24,34,30,1)";
   ctx.beginPath();
-  ctx.arc(21, 10, 1.2, 0, Math.PI * 2);
-  ctx.arc(21, 14, 1.2, 0, Math.PI * 2);
+  ctx.arc(5, -2, 1.2, 0, Math.PI * 2);
+  ctx.arc(5, 2, 1.2, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 }
