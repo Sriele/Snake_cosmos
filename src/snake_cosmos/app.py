@@ -692,7 +692,7 @@ class SnakeCosmosApp:
         pygame.draw.ellipse(head_surface, (24, 34, 30), (21, 13, 3, 3))
         angle = -math.degrees(math.atan2(uy, ux))
         rotated_head = pygame.transform.rotate(head_surface, angle)
-        head_rect = rotated_head.get_rect(center=(head_x + ux * 3, head_y + uy * 3))
+        head_rect = rotated_head.get_rect(center=(head_x, head_y))
         self.screen.blit(rotated_head, head_rect)
 
     def _draw_food(self) -> None:
