@@ -1,0 +1,58 @@
+[
+  {
+    "id": "comet_core",
+    "label": "Comet Core",
+    "short_label": "Comet",
+    "description": "Boosts sprint recharge and top speed",
+    "duration": 6.0,
+    "spawn_weight": 35,
+    "effect_type": "comet_regen",
+    "value": 8.0,
+    "instant_sprint": 28.0,
+    "icon_id": "spark",
+    "color": [115, 208, 255],
+    "glow_color": [130, 232, 255]
+  },
+  {
+    "id": "prism_orb",
+    "label": "Prism Orb",
+    "short_label": "Prism",
+    "description": "Doubles food score gains",
+    "duration": 8.0,
+    "spawn_weight": 26,
+    "effect_type": "score_mult",
+    "value": 1.0,
+    "instant_sprint": 10.0,
+    "icon_id": "diamond",
+    "color": [255, 113, 191],
+    "glow_color": [255, 154, 212]
+  },
+  {
+    "id": "nebula_veil",
+    "label": "Nebula Veil",
+    "short_label": "Veil",
+    "description": "Walls wrap instead of ending the run",
+    "duration": 7.0,
+    "spawn_weight": 22,
+    "effect_type": "border_wrap",
+    "value": 1.0,
+    "instant_sprint": 12.0,
+    "icon_id": "halo",
+    "color": [160, 126, 255],
+    "glow_color": [191, 166, 255]
+  },
+  {
+    "id": "chrono_pulse",
+    "label": "Chrono Pulse",
+    "short_label": "Chrono",
+    "description": "Slows the game pace for safer turns",
+    "duration": 5.0,
+    "spawn_weight": 17,
+    "effect_type": "time_dilation",
+    "value": 0.22,
+    "instant_sprint": 15.0,
+    "icon_id": "hourglass",
+    "color": [255, 208, 111],
+    "glow_color": [255, 226, 156]
+  }
+]

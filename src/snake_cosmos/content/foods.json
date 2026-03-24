@@ -1,0 +1,38 @@
+[
+  {
+    "id": "starlit_berry",
+    "label": "Starlit Berry",
+    "short_label": "Berry",
+    "rarity": "common",
+    "score": 10,
+    "growth": 1,
+    "sprint_gain": 8,
+    "spawn_weight": 68,
+    "color": [110, 236, 214],
+    "glow_color": [76, 255, 226]
+  },
+  {
+    "id": "nova_seed",
+    "label": "Nova Seed",
+    "short_label": "Nova",
+    "rarity": "rare",
+    "score": 24,
+    "growth": 2,
+    "sprint_gain": 15,
+    "spawn_weight": 24,
+    "color": [255, 178, 70],
+    "glow_color": [255, 205, 92]
+  },
+  {
+    "id": "astral_pearl",
+    "label": "Astral Pearl",
+    "short_label": "Pearl",
+    "rarity": "epic",
+    "score": 50,
+    "growth": 3,
+    "sprint_gain": 24,
+    "spawn_weight": 8,
+    "color": [237, 117, 255],
+    "glow_color": [245, 164, 255]
+  }
+]

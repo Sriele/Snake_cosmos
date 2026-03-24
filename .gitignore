@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+tmp/
+.cache/
+__pycache__/
+.pytest_cache/
+.venv/
+dist/
+build/
+.snake_cosmos_save.json
+AGENTS.md
+RTK.md

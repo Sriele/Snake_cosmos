@@ -1,0 +1,42 @@
+:root {
+  color-scheme: dark;
+  --bg-1: #050813;
+  --bg-2: #101a32;
+  --edge: #6c9ef6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(40, 96, 180, 0.24), transparent 28%),
+    radial-gradient(circle at 80% 28%, rgba(44, 170, 180, 0.18), transparent 30%),
+    radial-gradient(circle at 68% 82%, rgba(110, 54, 160, 0.18), transparent 26%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.shell {
+  width: min(100vw - 32px, 1280px);
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 28px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(140, 186, 255, 0.12);
+}

@@ -1,0 +1,2 @@
+"""Snake Cosmos package."""
+
